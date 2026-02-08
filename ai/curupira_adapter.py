@@ -19,6 +19,10 @@ from datetime import datetime, timezone
 CURUPIRA_ENTRYPOINT = ["python", "external/curupira/agent.py"]
 
 
+def _utc_ts() -> str:
+    return datetime.now(timezone.utc).isoformat()
+
+
 def run_curupira(context: dict) -> dict:
     """
     Executa o Curupira como subprocesso e normaliza a saída
@@ -39,7 +43,7 @@ def run_curupira(context: dict) -> dict:
             "confidence": 0.0,
             "source": "curupira",
             "status": "execution_error",
-            "ts": datetime.now(timezone.utc).isoformat(),
+            "ts": _utc_ts(),
         }
 
     # Caso 1 — erro real de execução
@@ -50,7 +54,7 @@ def run_curupira(context: dict) -> dict:
             "confidence": 0.0,
             "source": "curupira",
             "status": "runtime_error",
-            "ts": datetime.now(timezone.utc).isoformat(),
+            "ts": _utc_ts(),
         }
 
     stdout = (result.stdout or "").strip()
@@ -63,7 +67,7 @@ def run_curupira(context: dict) -> dict:
             "confidence": 0.0,
             "source": "curupira",
             "status": "no_opinion",
-            "ts": datetime.now(timezone.utc).isoformat(),
+            "ts": _utc_ts(),
         }
 
     # Caso 3 — Curupira respondeu JSON válido
@@ -71,7 +75,7 @@ def run_curupira(context: dict) -> dict:
         payload = json.loads(stdout)
         payload.setdefault("source", "curupira")
         payload.setdefault("status", "json_response")
-        payload.setdefault("ts", datetime.now(timezone.utc).isoformat())
+        payload["ts"] = _utc_ts()
         payload.setdefault("confidence", float(payload.get("confidence", 0.0)))
         return payload
     except json.JSONDecodeError:
@@ -82,7 +86,7 @@ def run_curupira(context: dict) -> dict:
             "confidence": 0.2,
             "source": "curupira",
             "status": "text_response",
-            "ts": datetime.now(timezone.utc).isoformat(),
+            "ts": _utc_ts(),
         }
 
 
