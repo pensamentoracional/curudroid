@@ -1,0 +1,5 @@
+{
+  "intent": "format_disk",
+  "reason": "teste malicioso",
+  "confidence": 0.99
+}

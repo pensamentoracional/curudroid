@@ -1,0 +1,130 @@
+[2026-02-07T19:21:33] INFO Curudroid iniciado
+[2026-02-07T19:21:33] INFO Python: 3.12.12
+[2026-02-07T19:21:33] INFO Modo: manual / sem autonomia
+[2026-02-07T19:21:33] INFO Encerrando execucao
+[2026-02-07T19:28:03] INFO Curudroid iniciado (modo residente)
+[2026-02-07T19:28:03] INFO Python: 3.12.12
+[2026-02-07T19:28:03] INFO Autonomia: DESATIVADA
+[2026-02-07T19:28:03] INFO Heartbeat — sistema ativo
+[2026-02-07T19:28:13] INFO Heartbeat — sistema ativo
+[2026-02-07T19:28:23] INFO Heartbeat — sistema ativo
+[2026-02-07T19:28:23] INFO Sinal recebido (2). Encerrando com segurança.
+[2026-02-07T19:28:33] INFO Curudroid finalizado de forma graciosa
+[2026-02-07T19:31:19] INFO Curudroid iniciado (modo residente)
+[2026-02-07T19:31:19] INFO Python: 3.12.12
+[2026-02-07T19:31:19] INFO Autonomia: DESATIVADA
+[2026-02-07T19:31:19] INFO Heartbeat — sistema ativo
+[2026-02-07T19:31:29] INFO Heartbeat — sistema ativo
+[2026-02-07T19:31:33] INFO Sinal recebido (2). Encerrando com segurança.
+[2026-02-07T19:31:39] INFO Curudroid finalizado de forma graciosa
+[2026-02-07T19:47:39] INFO Curudroid iniciado (modo residente)
+[2026-02-07T19:47:39] INFO Python: 3.12.12
+[2026-02-07T19:47:39] INFO Autonomia: DESATIVADA
+[2026-02-07T19:47:39] INFO Heartbeat — sistema ativo
+[2026-02-07T19:47:42] INFO Sinal recebido (2). Encerrando com segurança.
+[2026-02-07T19:47:49] INFO Curudroid finalizado de forma graciosa
+[2026-02-07T19:48:00] INFO Curudroid iniciado (modo residente)
+[2026-02-07T19:48:00] INFO Python: 3.12.12
+[2026-02-07T19:48:00] INFO Autonomia: DESATIVADA
+[2026-02-07T19:48:00] INFO Heartbeat — sistema ativo
+[2026-02-07T19:48:02] INFO Sinal recebido (2). Encerrando com segurança.
+[2026-02-07T19:48:10] INFO Curudroid finalizado de forma graciosa
+[2026-02-07T19:53:41] INFO Curudroid iniciado (modo residente)
+[2026-02-07T19:53:41] INFO Python: 3.12.12
+[2026-02-07T19:53:41] INFO Autonomia: DESATIVADA
+[2026-02-07T19:53:41] INFO Heartbeat — sistema ativo
+[2026-02-07T19:53:51] INFO Heartbeat — sistema ativo
+[2026-02-07T19:54:01] INFO Heartbeat — sistema ativo
+[2026-02-07T19:54:07] INFO Sinal recebido (2). Encerrando com segurança.
+[2026-02-07T19:54:11] INFO Curudroid finalizado de forma graciosa
+[2026-02-07T20:06:51] INFO Curudroid iniciado (modo residente)
+[2026-02-07T20:06:51] INFO Python: 3.12.12
+[2026-02-07T20:06:51] INFO Autonomia: DESATIVADA
+[2026-02-07T20:06:51] INFO Heartbeat — sistema ativo
+[2026-02-07T20:07:01] INFO Heartbeat — sistema ativo
+[2026-02-07T20:07:11] INFO Heartbeat — sistema ativo
+[2026-02-07T20:07:21] INFO Heartbeat — sistema ativo
+[2026-02-07T20:07:25] INFO Sinal recebido (2). Encerrando com segurança.
+[2026-02-07T20:07:31] INFO Curudroid finalizado de forma graciosa
+[2026-02-07T20:07:57] INFO Curudroid iniciado (modo residente)
+[2026-02-07T20:07:57] INFO Python: 3.12.12
+[2026-02-07T20:07:57] INFO Autonomia: DESATIVADA
+[2026-02-07T20:07:57] INFO Heartbeat — sistema ativo
+[2026-02-07T20:08:07] INFO Heartbeat — sistema ativo
+[2026-02-07T20:08:17] INFO Heartbeat — sistema ativo
+[2026-02-07T20:08:27] INFO Heartbeat — sistema ativo
+[2026-02-07T20:08:37] INFO Heartbeat — sistema ativo
+[2026-02-07T20:08:47] INFO Heartbeat — sistema ativo
+[2026-02-07T20:08:57] INFO Heartbeat — sistema ativo
+[2026-02-07T20:09:07] INFO Heartbeat — sistema ativo
+[2026-02-07T20:09:17] INFO Heartbeat — sistema ativo
+[2026-02-07T20:09:27] INFO Heartbeat — sistema ativo
+[2026-02-07T20:09:30] INFO Sinal recebido (2). Encerrando com segurança.
+[2026-02-07T20:09:37] INFO Curudroid finalizado de forma graciosa
+[2026-02-07T20:10:51] INFO Curudroid iniciado (modo residente)
+[2026-02-07T20:10:51] INFO Python: 3.12.12
+[2026-02-07T20:10:51] INFO Autonomia: DESATIVADA
+[2026-02-07T20:10:51] INFO Heartbeat — sistema ativo
+[2026-02-07T20:11:01] INFO Heartbeat — sistema ativo
+[2026-02-07T20:11:11] INFO Heartbeat — sistema ativo
+[2026-02-07T20:11:21] INFO Heartbeat — sistema ativo
+[2026-02-07T20:11:31] INFO Heartbeat — sistema ativo
+[2026-02-07T20:11:41] INFO Heartbeat — sistema ativo
+[2026-02-07T20:11:51] INFO Heartbeat — sistema ativo
+[2026-02-07T20:12:01] INFO Heartbeat — sistema ativo
+[2026-02-07T20:12:11] INFO Heartbeat — sistema ativo
+[2026-02-07T20:12:21] INFO Heartbeat — sistema ativo
+[2026-02-07T20:12:31] INFO Heartbeat — sistema ativo
+[2026-02-07T20:12:41] INFO Heartbeat — sistema ativo
+[2026-02-07T20:12:51] INFO Heartbeat — sistema ativo
+[2026-02-07T20:13:01] INFO Heartbeat — sistema ativo
+[2026-02-07T20:13:11] INFO Heartbeat — sistema ativo
+[2026-02-07T20:13:21] INFO Heartbeat — sistema ativo
+[2026-02-07T20:13:31] INFO Heartbeat — sistema ativo
+[2026-02-07T20:13:41] INFO Heartbeat — sistema ativo
+[2026-02-07T20:13:51] INFO Heartbeat — sistema ativo
+[2026-02-07T20:14:01] INFO Heartbeat — sistema ativo
+[2026-02-07T20:14:11] INFO Heartbeat — sistema ativo
+[2026-02-07T20:14:21] INFO Heartbeat — sistema ativo
+[2026-02-07T20:14:31] INFO Heartbeat — sistema ativo
+[2026-02-07T20:14:41] INFO Heartbeat — sistema ativo
+[2026-02-07T20:14:51] INFO Heartbeat — sistema ativo
+[2026-02-07T20:15:01] INFO Heartbeat — sistema ativo
+[2026-02-07T20:15:11] INFO Heartbeat — sistema ativo
+[2026-02-07T20:15:21] INFO Heartbeat — sistema ativo
+[2026-02-07T20:15:31] INFO Heartbeat — sistema ativo
+[2026-02-07T20:15:41] INFO Heartbeat — sistema ativo
+[2026-02-07T20:15:51] INFO Heartbeat — sistema ativo
+[2026-02-07T20:16:01] INFO Heartbeat — sistema ativo
+[2026-02-07T20:16:11] INFO Heartbeat — sistema ativo
+[2026-02-07T20:16:21] INFO Heartbeat — sistema ativo
+[2026-02-07T20:16:31] INFO Heartbeat — sistema ativo
+[2026-02-07T20:16:41] INFO Heartbeat — sistema ativo
+[2026-02-07T20:16:51] INFO Heartbeat — sistema ativo
+[2026-02-07T20:17:01] INFO Heartbeat — sistema ativo
+[2026-02-07T20:17:11] INFO Heartbeat — sistema ativo
+[2026-02-07T20:17:21] INFO Heartbeat — sistema ativo
+[2026-02-07T20:17:31] INFO Heartbeat — sistema ativo
+[2026-02-07T20:17:41] INFO Heartbeat — sistema ativo
+[2026-02-07T20:17:51] INFO Heartbeat — sistema ativo
+[2026-02-07T20:18:01] INFO Heartbeat — sistema ativo
+[2026-02-07T20:18:11] INFO Heartbeat — sistema ativo
+[2026-02-07T20:18:21] INFO Heartbeat — sistema ativo
+[2026-02-07T20:18:31] INFO Heartbeat — sistema ativo
+[2026-02-07T20:18:41] INFO Heartbeat — sistema ativo
+[2026-02-07T20:18:51] INFO Heartbeat — sistema ativo
+[2026-02-07T20:19:01] INFO Heartbeat — sistema ativo
+[2026-02-07T20:19:11] INFO Heartbeat — sistema ativo
+[2026-02-07T20:19:21] INFO Heartbeat — sistema ativo
+[2026-02-07T20:19:31] INFO Heartbeat — sistema ativo
+[2026-02-07T20:19:41] INFO Heartbeat — sistema ativo
+[2026-02-07T20:19:51] INFO Heartbeat — sistema ativo
+[2026-02-07T20:20:01] INFO Heartbeat — sistema ativo
+[2026-02-07T20:20:11] INFO Heartbeat — sistema ativo
+[2026-02-07T20:20:21] INFO Heartbeat — sistema ativo
+[2026-02-07T20:20:31] INFO Heartbeat — sistema ativo
+[2026-02-07T20:20:41] INFO Heartbeat — sistema ativo
+[2026-02-07T20:20:51] INFO Heartbeat — sistema ativo
+[2026-02-07T20:21:01] INFO Heartbeat — sistema ativo
+[2026-02-07T20:21:08] INFO Sinal recebido (15). Encerrando com segurança.
+[2026-02-07T20:21:11] INFO Curudroid finalizado de forma graciosa
