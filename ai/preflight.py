@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 import importlib
-import pkgutil
 import sys
 import warnings
 from dataclasses import dataclass, field
@@ -11,6 +10,7 @@ from pathlib import Path
 from typing import Callable, List
 
 from ai.config import AppConfig, config_summary, load_config, validate_config
+from ai.plugins.registry import PluginStatus, validate_plugins
 
 
 @dataclass
@@ -68,29 +68,28 @@ def _check_config(config: AppConfig, report: PreflightReport) -> None:
 
 
 def _check_plugins(report: PreflightReport) -> None:
-    try:
-        plugins_pkg = importlib.import_module("ai.plugins")
-    except Exception as exc:
-        report.errors.append(f"Falha ao carregar pacote ai.plugins: {exc}")
-        return
-
-    plugin_names = sorted(
-        m.name for m in pkgutil.iter_modules(plugins_pkg.__path__) if not m.name.startswith("_")
-    )
-    if not plugin_names:
+    registry_report = validate_plugins()
+    if not registry_report.results:
         report.warnings.append("Nenhum plugin encontrado em ai/plugins")
         return
 
-    for name in plugin_names:
-        module_name = f"ai.plugins.{name}"
-        try:
-            module = importlib.import_module(module_name)
-            if not hasattr(module, "run"):
-                report.warnings.append(f"Plugin sem run(): {module_name}")
+    for result in registry_report.results:
+        if result.status == PluginStatus.OK:
+            report.infos.append(f"Plugin {result.plugin_id}: OK")
+        elif result.status == PluginStatus.DISABLED:
+            report.warnings.append(
+                f"Plugin {result.plugin_id}: DISABLED ({result.reason})"
+            )
+            if result.core:
+                report.errors.append(
+                    f"Plugin core {result.plugin_id}: DISABLED ({result.reason})"
+                )
+        elif result.status == PluginStatus.ERROR:
+            message = f"Plugin {result.plugin_id}: ERROR ({result.reason})"
+            if result.core:
+                report.errors.append(message)
             else:
-                report.infos.append(f"Plugin OK: {module_name}")
-        except Exception as exc:
-            report.errors.append(f"Plugin inválido {module_name}: {exc}")
+                report.warnings.append(message)
 
 
 def _check_deprecations(report: PreflightReport) -> None:

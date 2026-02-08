@@ -1,4 +1,3 @@
-
 #!/usr/bin/env python3
 
 import os
@@ -8,6 +7,28 @@ from datetime import datetime
 from pathlib import Path
 
 from ai.config import CURUPIRA_RISK_THRESHOLD
+
+from ai.plugins.contracts import PluginSpec
+
+PLUGIN_SPEC = PluginSpec(
+    plugin_id="summarize_logs",
+    plugin_version="1.0.0",
+    required_env=["AI_PROVIDER", "AI_API_KEY"],
+    capabilities=["planning.summary", "ai.optional"],
+    core=False,
+)
+
+
+def init(config, logger) -> None:
+    del config
+    del logger
+
+
+def healthcheck() -> tuple[bool, str]:
+    plans_dir = Path("ai/plans")
+    plans_dir.mkdir(parents=True, exist_ok=True)
+    return True, "estrutura local válida"
+
 
 # Caminhos base
 BASE_DIR = Path(__file__).resolve().parent
