@@ -31,3 +31,13 @@ else
   echo "[FAIL] Testes rápidos falharam"
   exit 1
 fi
+
+echo
+echo "[UNICODE BIDI CHECK]"
+if rg -nP "[\x{202A}-\x{202E}\x{2066}-\x{2069}]" . >/dev/null; then
+  echo "[FAIL] Caracteres bidi invisíveis detectados"
+  rg -nP "[\x{202A}-\x{202E}\x{2066}-\x{2069}]" .
+  exit 1
+else
+  echo "[OK] Sem caracteres bidi invisíveis"
+fi
