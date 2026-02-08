@@ -13,7 +13,7 @@ Regras:
 
 import json
 import subprocess
-from datetime import datetime
+from datetime import datetime, timezone
 
 
 CURUPIRA_ENTRYPOINT = ["python", "external/curupira/agent.py"]
@@ -39,7 +39,7 @@ def run_curupira(context: dict) -> dict:
             "confidence": 0.0,
             "source": "curupira",
             "status": "execution_error",
-            "ts": datetime.utcnow().isoformat(),
+            "ts": datetime.now(timezone.utc).isoformat(),
         }
 
     # Caso 1 — erro real de execução
@@ -50,7 +50,7 @@ def run_curupira(context: dict) -> dict:
             "confidence": 0.0,
             "source": "curupira",
             "status": "runtime_error",
-            "ts": datetime.utcnow().isoformat(),
+            "ts": datetime.now(timezone.utc).isoformat(),
         }
 
     stdout = (result.stdout or "").strip()
@@ -63,7 +63,7 @@ def run_curupira(context: dict) -> dict:
             "confidence": 0.0,
             "source": "curupira",
             "status": "no_opinion",
-            "ts": datetime.utcnow().isoformat(),
+            "ts": datetime.now(timezone.utc).isoformat(),
         }
 
     # Caso 3 — Curupira respondeu JSON válido
@@ -71,7 +71,7 @@ def run_curupira(context: dict) -> dict:
         payload = json.loads(stdout)
         payload.setdefault("source", "curupira")
         payload.setdefault("status", "json_response")
-        payload.setdefault("ts", datetime.utcnow().isoformat())
+        payload.setdefault("ts", datetime.now(timezone.utc).isoformat())
         payload.setdefault("confidence", float(payload.get("confidence", 0.0)))
         return payload
     except json.JSONDecodeError:
@@ -82,7 +82,7 @@ def run_curupira(context: dict) -> dict:
             "confidence": 0.2,
             "source": "curupira",
             "status": "text_response",
-            "ts": datetime.utcnow().isoformat(),
+            "ts": datetime.now(timezone.utc).isoformat(),
         }
 
 

@@ -1,4 +1,3 @@
-
 #!/data/data/com.termux/files/usr/bin/bash
 
 echo "=== Curudroid :: Diagnóstico ==="
@@ -23,3 +22,12 @@ fi
 echo
 echo "[LOGS - últimos 10]"
 tail -n 10 logs/curudroid.log 2>/dev/null || echo "Sem logs"
+
+echo
+echo "[TESTES RÁPIDOS]"
+if python -m unittest -q; then
+  echo "[OK] Testes rápidos passaram"
+else
+  echo "[FAIL] Testes rápidos falharam"
+  exit 1
+fi

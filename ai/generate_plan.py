@@ -4,7 +4,7 @@
 import os
 import json
 import importlib
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 
 from ai.config import CURUPIRA_RISK_THRESHOLD
@@ -38,7 +38,7 @@ def load_plugin(intent_name: str):
 
 
 def now_ts():
-    return datetime.utcnow().isoformat()
+    return datetime.now(timezone.utc).isoformat()
 
 
 # =========================
@@ -73,7 +73,7 @@ def generate_plan():
         plan_lines.append("# STATUS: REJEITADO")
         plan_lines.append("# Motivo: Nenhum plugin autorizado para esta intenção")
 
-        plan_path = PLANS_DIR / f"{datetime.utcnow().strftime('%Y%m%dT%H%M%S')}_{intent_name}.plan"
+        plan_path = PLANS_DIR / f"{datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%S')}_{intent_name}.plan"
         with open(plan_path, "w", encoding="utf-8") as f:
             f.write("\n".join(plan_lines))
 
@@ -142,7 +142,7 @@ def generate_plan():
     # -------------------------
     # Persistir plano
     # -------------------------
-    plan_filename = f"{datetime.utcnow().strftime('%Y%m%dT%H%M%S')}_{intent_name}.plan"
+    plan_filename = f"{datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%S')}_{intent_name}.plan"
     plan_path = PLANS_DIR / plan_filename
 
     with open(plan_path, "w", encoding="utf-8") as f:
