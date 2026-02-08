@@ -2,7 +2,6 @@
 
 Mantém defaults seguros e validações leves para ambiente Termux/Android.
 """
-
 from __future__ import annotations
 
 import os
@@ -10,6 +9,9 @@ from dataclasses import dataclass
 from typing import List
 
 _ALLOWED_LOG_LEVELS = {"DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"}
+
+# Fonte canônica de default; valor efetivo vem de AppConfig em runtime.
+DEFAULT_CURUPIRA_RISK_THRESHOLD = 0.4
 
 
 @dataclass(frozen=True)
@@ -40,7 +42,9 @@ def load_config() -> AppConfig:
         ai_provider=(os.getenv("AI_PROVIDER") or "none").strip().lower(),
         ai_api_key=(os.getenv("AI_API_KEY") or "").strip(),
         telegram_token=(os.getenv("TELEGRAM_TOKEN") or "").strip(),
-        curupira_risk_threshold=_read_float("CURUPIRA_RISK_THRESHOLD", 0.4),
+        curupira_risk_threshold=_read_float(
+            "CURUPIRA_RISK_THRESHOLD", DEFAULT_CURUPIRA_RISK_THRESHOLD
+        ),
         log_dir=(os.getenv("LOG_DIR") or "logs").strip(),
         data_dir=(os.getenv("DATA_DIR") or "data").strip(),
     )
@@ -97,5 +101,5 @@ def config_summary(config: AppConfig) -> str:
     )
 
 
-# Compatibilidade com imports antigos
-CURUPIRA_RISK_THRESHOLD = load_config().curupira_risk_threshold
+# Compatibilidade legada sem side-effect em import-time.
+CURUPIRA_RISK_THRESHOLD = DEFAULT_CURUPIRA_RISK_THRESHOLD
