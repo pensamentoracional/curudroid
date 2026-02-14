@@ -2,15 +2,21 @@
 *.pyc
 __pycache__/
 
-# Termux / local
+# Termux / runtime logs
 *.log
 *.tmp
 logs/
+
+# Runtime data
 data/metrics.txt
 data/last_state.txt
 
-# Generated plans
+# Intent pipeline runtime state
+ai/intents/
+ai/approved/
+ai/rejected/
 ai/plans/
+ai/results/
 
 # Env files
 .env
@@ -22,4 +28,3 @@ ai/plans/
 
 # Python virtual env
 venv/
-

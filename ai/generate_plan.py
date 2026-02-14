@@ -12,6 +12,7 @@ from ai.config import CURUPIRA_RISK_THRESHOLD
 # Caminhos base
 BASE_DIR = Path(__file__).resolve().parent
 INTENTS_DIR = BASE_DIR / "intents"
+APPROVED_DIR = BASE_DIR / "approved"
 PLUGINS_DIR = BASE_DIR / "plugins"
 PLANS_DIR = BASE_DIR / "plans"
 
@@ -21,12 +22,15 @@ PLANS_DIR.mkdir(parents=True, exist_ok=True)
 # Utilidades
 # =========================
 
+
 def load_latest_intent():
-    intents = sorted(INTENTS_DIR.glob("*.json"))
-    if not intents:
-        raise RuntimeError("Nenhuma intenção encontrada em ai/intents/")
-    with open(intents[-1], "r", encoding="utf-8") as f:
-        return json.load(f), intents[-1].name
+    approved = sorted(APPROVED_DIR.glob("*.json"))
+    if not approved:
+        raise RuntimeError("Nenhuma intenção encontrada em ai/approved/")
+
+    latest = approved[-1]
+    with open(latest, "r", encoding="utf-8") as f:
+        return json.load(f), latest.name
 
 
 def load_plugin(intent_name: str):
