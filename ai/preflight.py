@@ -73,23 +73,14 @@ def _check_plugins(report: PreflightReport) -> None:
         report.warnings.append("Nenhum plugin encontrado em ai/plugins")
         return
 
+    for line in registry_report.summary_lines:
+        report.infos.append(f"Plugin {line}")
+
     for result in registry_report.results:
-        if result.status == PluginStatus.OK:
-            report.infos.append(f"Plugin {result.plugin_id}: OK")
-        elif result.status == PluginStatus.DISABLED:
-            report.warnings.append(
-                f"Plugin {result.plugin_id}: DISABLED ({result.reason})"
-            )
-            if result.core:
-                report.errors.append(
-                    f"Plugin core {result.plugin_id}: DISABLED ({result.reason})"
-                )
+        if result.status == PluginStatus.DISABLED:
+            report.warnings.append(f"Plugin {result.plugin_id}: DISABLED ({result.reason})")
         elif result.status == PluginStatus.ERROR:
-            message = f"Plugin {result.plugin_id}: ERROR ({result.reason})"
-            if result.core:
-                report.errors.append(message)
-            else:
-                report.warnings.append(message)
+            report.errors.append(f"Plugin {result.plugin_id}: ERROR ({result.reason})")
 
 
 def _check_deprecations(report: PreflightReport) -> None:

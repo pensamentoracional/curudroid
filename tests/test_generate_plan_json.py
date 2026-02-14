@@ -9,8 +9,8 @@ from contextlib import redirect_stdout
 import ai.generate_plan as generate_plan
 
 
-class GeneratePlanContractTests(unittest.TestCase):
-    def test_generated_plan_contains_essential_fields(self):
+class GeneratePlanJsonTests(unittest.TestCase):
+    def test_generated_plan_json_has_required_structure(self):
         with tempfile.TemporaryDirectory() as tmp:
             base = Path(tmp)
             approved_dir = base / "approved"
@@ -29,14 +29,23 @@ class GeneratePlanContractTests(unittest.TestCase):
                 with redirect_stdout(io.StringIO()):
                     generate_plan.generate_plan()
 
-            plan_files = sorted(plans_dir.glob("*.plan"))
-            self.assertTrue(plan_files, "Deve gerar ao menos um arquivo de plano")
+            json_files = sorted(plans_dir.glob("*.json"))
+            self.assertTrue(json_files, "Deve gerar ao menos um plan.json")
 
-            content = plan_files[-1].read_text(encoding="utf-8")
-            self.assertIn("# RISCO ESTIMADO:", content)
-            self.assertIn("# LIMIAR CURUPIRA:", content)
-            self.assertIn("# Intenção: scan_logs", content)
-            self.assertIn("# Plano sugerido (DRY-RUN)", content)
+            payload = json.loads(json_files[-1].read_text(encoding="utf-8"))
+            self.assertIsInstance(payload, dict)
+            self.assertIn("risk_estimate", payload)
+            self.assertIsInstance(payload["risk_estimate"], (int, float))
+            self.assertIn("commands", payload)
+            self.assertIsInstance(payload["commands"], list)
+
+            for command in payload["commands"]:
+                self.assertIsInstance(command, dict)
+                self.assertIn("argv", command)
+                self.assertIn("description", command)
+                self.assertIsInstance(command["argv"], list)
+                self.assertTrue(all(isinstance(i, str) for i in command["argv"]))
+                self.assertIsInstance(command["description"], str)
 
 
 if __name__ == "__main__":
