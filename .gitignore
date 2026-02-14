@@ -1,0 +1,25 @@
+# Python bytecode
+*.pyc
+__pycache__/
+
+# Termux / local
+*.log
+*.tmp
+logs/
+data/metrics.txt
+data/last_state.txt
+
+# Generated plans
+ai/plans/
+
+# Env files
+.env
+
+# Editor / OS
+.vscode/
+.idea/
+.DS_Store
+
+# Python virtual env
+venv/
+

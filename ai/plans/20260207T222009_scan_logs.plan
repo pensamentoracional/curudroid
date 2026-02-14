@@ -1,5 +1,0 @@
-# Plano sugerido (DRY-RUN)
-# Intenção: scan_logs
-cat logs/curudroid.log | tail -n 50
-grep ERROR logs/curudroid.log
-grep WARN logs/curudroid.log

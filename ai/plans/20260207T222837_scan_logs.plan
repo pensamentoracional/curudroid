@@ -1,9 +1,0 @@
-# RISCO ESTIMADO: 0.18
-# Escala: 0.0 (mínimo) → 1.0 (máximo)
-# Plugin: scan_logs
-
-# Plano sugerido (DRY-RUN)
-# Intenção: scan_logs
-cat logs/curudroid.log | tail -n 50
-grep ERROR logs/curudroid.log
-grep WARN logs/curudroid.log
