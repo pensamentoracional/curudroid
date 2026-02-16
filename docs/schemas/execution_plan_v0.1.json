@@ -1,0 +1,30 @@
+{
+  "schema_version": "0.1",
+  "required_fields": [
+    "id",
+    "created_at",
+    "risk_score",
+    "source",
+    "commands"
+  ],
+  "field_definitions": {
+    "id": "string - unique plan identifier",
+    "created_at": "ISO 8601 timestamp",
+    "risk_score": "integer 0-10",
+    "source": "string - plugin or subsystem that generated the plan",
+    "commands": "array of command objects"
+  },
+  "command_object": {
+    "type": "shell | python",
+    "command": "string - raw command to execute",
+    "timeout_seconds": "integer - max execution time"
+  },
+  "rules": [
+    "commands array must not be empty",
+    "risk_score must be <= execution threshold",
+    "timeout_seconds must be <= 30",
+    "no command chaining allowed",
+    "no pipes allowed",
+    "no redirection allowed"
+  ]
+}
