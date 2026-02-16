@@ -10,13 +10,16 @@ logs/
 # Runtime data
 data/metrics.txt
 data/last_state.txt
+data/policy_lock.json
 
 # Intent pipeline runtime state
 ai/intents/
-ai/approved/
 ai/rejected/
 ai/plans/
 ai/results/
+ai/history/
+ai/approvals/
+ai/approved/
 
 # Env files
 .env
@@ -28,3 +31,4 @@ ai/results/
 
 # Python virtual env
 venv/
+venv_pr2/
