@@ -3,6 +3,7 @@ from core.autonomy_supervisor import AutonomySupervisor
 from core.plan_validator import load_plan
 from core.curupira_evaluator import CurupiraEvaluator
 from core.observability import log_decision, increment_metric
+from core.ai_advisor import AIAdvisor, build_ai_context
 
 def detect_anomaly(plan: dict, decisions: list[dict]) -> bool:
     try:
@@ -36,6 +37,8 @@ class ReactiveAutonomy:
             if config.curupira_enabled
             else None
         )
+
+        self.ai_advisor = AIAdvisor.from_config(config)
 
     def process_next_intent(self):
         intents = self.queue.load()
@@ -77,6 +80,19 @@ class ReactiveAutonomy:
             increment_metric("intents_processed")
 
             decisions_log = []
+
+            # AI consultiva (não altera decisão oficial)
+            self.ai_advisor.analyze(
+                plan,
+                build_ai_context(
+                    plan,
+                    {
+                        "entrypoint": "autonomy_reactive",
+                        "intent_id": intent.get("intent_id"),
+                        "plan_path": plan_path,
+                    },
+                ),
+            )
 
         except Exception as e:
             intent["status"] = "error"

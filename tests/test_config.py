@@ -15,6 +15,9 @@ class ConfigTests(unittest.TestCase):
             curupira_risk_threshold=0.4,
             log_dir="logs",
             data_dir="data",
+            supervisor_enabled=True,
+            curupira_enabled=True,
+            autonomy_reactive_enabled=False,
         )
 
         result = validate_config(cfg)
@@ -37,6 +40,9 @@ class ConfigTests(unittest.TestCase):
             curupira_risk_threshold=0.4,
             log_dir="logs",
             data_dir="data",
+            supervisor_enabled=True,
+            curupira_enabled=True,
+            autonomy_reactive_enabled=False,
         )
         errors, warnings = validate_config(cfg)
         self.assertTrue(any("LOG_LEVEL inválido" in e for e in errors))
@@ -51,6 +57,9 @@ class ConfigTests(unittest.TestCase):
             curupira_risk_threshold=0.4,
             log_dir="logs",
             data_dir="data",
+            supervisor_enabled=True,
+            curupira_enabled=True,
+            autonomy_reactive_enabled=False,
         )
         summary = config_summary(cfg)
         self.assertNotIn("sk-supersecret", summary)

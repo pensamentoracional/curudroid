@@ -14,6 +14,9 @@ class PreflightTests(unittest.TestCase):
             curupira_risk_threshold=0.4,
             log_dir="logs",
             data_dir="data",
+            supervisor_enabled=True,
+            curupira_enabled=True,
+            autonomy_reactive_enabled=False,
         )
         report = run_preflight(cfg)
         exit_code = emit_report(report, log_func=lambda _: None)
@@ -29,6 +32,9 @@ class PreflightTests(unittest.TestCase):
             curupira_risk_threshold=0.4,
             log_dir="logs",
             data_dir="data",
+            supervisor_enabled=True,
+            curupira_enabled=True,
+            autonomy_reactive_enabled=False,
         )
         report = run_preflight(cfg)
         exit_code = emit_report(report, log_func=lambda _: None)

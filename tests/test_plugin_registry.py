@@ -20,7 +20,8 @@ class PluginRegistryTests(unittest.TestCase):
         self.assertIn("faltam env vars", by_id["summarize_logs"].reason)
 
     def test_core_plugins_are_ok_in_default_env(self):
-        report = validate_plugins()
+        with mock.patch("pathlib.Path.exists", return_value=True):
+            report = validate_plugins()
         by_id = {r.plugin_id: r for r in report.results}
         self.assertEqual(by_id["health_check"].status, PluginStatus.OK)
         self.assertEqual(by_id["scan_logs"].status, PluginStatus.OK)

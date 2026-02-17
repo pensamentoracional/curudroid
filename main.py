@@ -18,6 +18,7 @@ from core.autonomy_supervisor import AutonomySupervisor
 from core.autonomy_reactive import ReactiveAutonomy
 from core.command_policy import load_policy
 from core.observability import load_metrics, load_last_decisions
+from core.ai_advisor import AIAdvisor, build_ai_context
 
 
 running = True
@@ -252,6 +253,19 @@ def main(
         except Exception as e:
             log(f"ERROR Falha ao carregar plano para avaliaao: {e}")
             return 1
+
+        # ---------- AI Advisor (consultivo e isolado) ----------
+        advisor = AIAdvisor.from_config(config)
+        advisor.analyze(
+            plan,
+            build_ai_context(
+                plan,
+                {
+                    "entrypoint": "executor_assistido",
+                    "requested_mode": "apply" if apply else "dry-run",
+                },
+            ),
+        )
 
         # ---------- Fail-Closed: Verificar Ledger antes de Apply ----------
         if apply:
