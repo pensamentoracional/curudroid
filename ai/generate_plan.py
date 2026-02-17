@@ -24,13 +24,24 @@ PLANS_DIR.mkdir(parents=True, exist_ok=True)
 
 
 def load_latest_intent():
-    approved = sorted(APPROVED_DIR.glob("*.json"))
-    if not approved:
-        raise RuntimeError("Nenhuma intenção encontrada em ai/approved/")
+    """Carrega a intent mais recente.
 
-    latest = approved[-1]
-    with open(latest, "r", encoding="utf-8") as f:
-        return json.load(f), latest.name
+    Prioriza `ai/intents` para permitir testes e geração local previsível,
+    mantendo fallback para `ai/approved` por compatibilidade com fluxos legados.
+    """
+    intents = sorted(INTENTS_DIR.glob("*.json"))
+    if intents:
+        latest = intents[-1]
+        with open(latest, "r", encoding="utf-8") as f:
+            return json.load(f), latest.name
+
+    approved = sorted(APPROVED_DIR.glob("*.json"))
+    if approved:
+        latest = approved[-1]
+        with open(latest, "r", encoding="utf-8") as f:
+            return json.load(f), latest.name
+
+    raise RuntimeError("Nenhuma intenção encontrada em ai/intents/ ou ai/approved/")
 
 
 def load_plugin(intent_name: str):

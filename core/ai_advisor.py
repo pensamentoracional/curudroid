@@ -5,7 +5,7 @@ import json
 import os
 import time
 from dataclasses import asdict, dataclass
-from datetime import datetime
+from datetime import UTC, datetime
 
 from ai.config import AppConfig
 from core.ai_providers import NullProvider, OpenAIProvider
@@ -158,7 +158,7 @@ def _normalize(raw: dict, provider: str, model: str) -> AIRecommendation:
         explanation=explanation,
         provider=provider,
         model=model,
-        timestamp=datetime.utcnow().isoformat() + "Z",
+        timestamp=datetime.now(UTC).isoformat().replace("+00:00", "Z"),
     )
 
 
