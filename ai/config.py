@@ -12,6 +12,9 @@ _ALLOWED_LOG_LEVELS = {"DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"}
 
 # Fonte canônica de default; valor efetivo vem de AppConfig em runtime.
 DEFAULT_CURUPIRA_RISK_THRESHOLD = 0.4
+DEFAULT_SUPERVISOR_ENABLED = True
+DEFAULT_CURUPIRA_ENABLED = True
+DEFAULT_AUTONOMY_REACTIVE_ENABLED = False
 
 
 @dataclass(frozen=True)
@@ -23,6 +26,9 @@ class AppConfig:
     curupira_risk_threshold: float
     log_dir: str
     data_dir: str
+    supervisor_enabled: bool
+    curupira_enabled: bool
+    autonomy_reactive_enabled: bool
 
 
 def _read_float(name: str, default: float) -> float:
@@ -34,6 +40,19 @@ def _read_float(name: str, default: float) -> float:
     except ValueError:
         return default
 
+def _read_bool(name: str, default: bool) -> bool:
+    raw = (os.getenv(name) or "").strip().lower()
+
+    if not raw:
+        return default
+
+    if raw in {"1", "true", "yes", "on"}:
+        return True
+
+    if raw in {"0", "false", "no", "off"}:
+        return False
+
+    return default
 
 def load_config() -> AppConfig:
     """Lê variáveis de ambiente com defaults conservadores."""
@@ -47,6 +66,21 @@ def load_config() -> AppConfig:
         ),
         log_dir=(os.getenv("LOG_DIR") or "logs").strip(),
         data_dir=(os.getenv("DATA_DIR") or "data").strip(),
+
+        supervisor_enabled=_read_bool(
+            "SUPERVISOR_ENABLED",
+            DEFAULT_SUPERVISOR_ENABLED
+        ),
+
+        curupira_enabled=_read_bool(
+            "CURUPIRA_ENABLED",
+            DEFAULT_CURUPIRA_ENABLED
+        ),
+
+        autonomy_reactive_enabled=_read_bool(
+            "AUTONOMY_REACTIVE_ENABLED",
+            DEFAULT_AUTONOMY_REACTIVE_ENABLED
+        ),
     )
 
 

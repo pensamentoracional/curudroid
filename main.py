@@ -14,6 +14,10 @@ from core.policy_lock import (
     verify_policy_locked,
     PolicyLockError,
 )
+from core.autonomy_supervisor import AutonomySupervisor
+from core.autonomy_reactive import ReactiveAutonomy
+from core.command_policy import load_policy
+from core.observability import load_metrics, load_last_decisions
 
 
 running = True
@@ -115,6 +119,47 @@ def run_startup_preflight(config: AppConfig) -> bool:
     log("ERROR Preflight: FALHOU")
     return False
 
+def show_observability_report(config):
+    print("=== CURUDROID OBSERVABILITY REPORT ===\n")
+
+    print("Flags:")
+    print(f"AUTONOMY_REACTIVE_ENABLED={config.autonomy_reactive_enabled}")
+    print(f"SUPERVISOR_ENABLED={config.supervisor_enabled}")
+    print(f"CURUPIRA_ENABLED={config.curupira_enabled}")
+    print(f"CURUPIRA_RISK_THRESHOLD={config.curupira_risk_threshold}\n")
+
+    print("Metrics:")
+    metrics = load_metrics()
+    if not metrics:
+        print("- Nenhuma metrica registrada")
+    else:
+        for k, v in metrics.items():
+            print(f"- {k}: {v}")
+    print()
+
+    print("Ultimas decisoes:")
+    decisions = load_last_decisions(5)
+    if not decisions:
+        print("- Nenhuma decisao registrada")
+    else:
+        for d in decisions:
+            print(f"- {d.get('component')} | {d.get('reason')}")
+    print()
+
+    print("Ledger:")
+    try:
+        verify_ledger()
+        print("OK")
+    except LedgerIntegrityError:
+        print("CORROMPIDO")
+
+    print()
+
+    policy = load_policy()
+    print(f"Policy version: {policy.get('version')}")
+
+    return 0
+
 
 # ---------- Main ----------
 def main(
@@ -126,6 +171,8 @@ def main(
     force_recover: bool = False,
     policy_maintenance: bool = False,
     policy_lock_init: bool = False,
+    enable_autonomy: bool = False,
+    process_intents: bool = False,
 ):
 
     config = load_config()
@@ -197,6 +244,15 @@ def main(
         log(f"INFO Plano solicitado: {execute_plan_path}")
         log(f"INFO Modo: {'APPLY' if apply else 'DRY-RUN'}")
 
+        # Carregar plano explicitamente
+        try:
+            import json
+            with open(execute_plan_path, "r", encoding="utf-8") as f:
+                plan = json.load(f)
+        except Exception as e:
+            log(f"ERROR Falha ao carregar plano para avaliaao: {e}")
+            return 1
+
         # ---------- Fail-Closed: Verificar Ledger antes de Apply ----------
         if apply:
             try:
@@ -206,13 +262,65 @@ def main(
                 set_state("LEDGER_TAMPERED")
                 return 1
 
+        # ---------- Logica de autonomia no executor ----------
+        if enable_autonomy:
+            supervisor = AutonomySupervisor(
+                risk_threshold=config.curupira_risk_threshold
+            )
+
+            decision = supervisor.evaluate(plan)
+
+            if not decision.allowed:
+                log(f"INFO Autonomia bloqueada: {decision.reason}")
+                return 0
+
+            if decision.max_mode == "dry-run":
+                apply = False
+                log("INFO Autonomia permitiu apenas DRY-RUN automatico")
+        # ---------- Execuao ----------
         try:
             report = execute_plan(execute_plan_path, apply=apply)
-            log(f"INFO Execuao concluida  plano {report['plan_id']}")
+            log(f"INFO Execuao concluida com sucesso  plano {report['plan_id']}")
             return 0
         except PlanExecutionError as e:
             log(f"ERROR Execuao falhou: {e}")
             return 1
+
+    # ---------- Autonomia Reativa ----------
+    if process_intents:
+        # Verificaao obrigatoria de integridade antes da autonomia
+        try:
+            verify_ledger()
+        except LedgerIntegrityError as e:
+            log(f"CRITICAL Ledger comprometido  {e}")
+            set_state("LEDGER_TAMPERED")
+            return 1
+
+        if not config.autonomy_reactive_enabled:
+            log("INFO Autonomia reativa desativada por configuraao")
+            return 0
+
+        log("INFO Processando fila de intents")
+
+        reactive = ReactiveAutonomy(config)
+        result = reactive.process_next_intent()
+
+        if result["status"] == "empty":
+            log("INFO Nenhuma intent na fila")
+            return 0
+
+        if result["status"] == "blocked":
+            log(f"INFO Intent bloqueada: {result['reason']}")
+            return 0
+
+        if result["status"] == "ready_for_dry_run":
+            log("INFO Intent aprovada para DRY-RUN automatico")
+            try:
+                report = execute_plan(result["plan_path"], apply=False)
+                log(f"INFO DRY-RUN executado via autonomia reativa: {report['plan_id']}")
+            except Exception as e:
+                log(f"ERROR Falha no DRY-RUN reativo: {e}")
+            return 0
 
     # ---------- Modo Residente ----------
     set_state("STARTING")
@@ -300,11 +408,34 @@ if __name__ == "__main__":
         help="Inicializa ou reinicializa o lock da policy",
     )
 
+    parser.add_argument(
+        "--enable-autonomy",
+        action="store_true",
+        help="Ativa modo autonomia supervisionada",
+    )
+
+    parser.add_argument(
+        "--process-intents",
+        action="store_true",
+        help="Processa proxima intent da fila reativa",
+    )
+
+    parser.add_argument(
+        "--observability-report",
+        action="store_true",
+        help="Exibe snapshot completo de observabilidade e governana",
+    )
+
 
     args = parser.parse_args()
 
     signal.signal(signal.SIGINT, handle_signal)
     signal.signal(signal.SIGTERM, handle_signal)
+
+    if args.observability_report:
+        config = load_config()
+        raise SystemExit(show_observability_report(config))
+
 
     raise SystemExit(
         main(
@@ -316,5 +447,7 @@ if __name__ == "__main__":
             force_recover=args.force_recover,
             policy_maintenance=args.policy_maintenance,
             policy_lock_init=args.policy_lock_init,
+            enable_autonomy=args.enable_autonomy,
+            process_intents=args.process_intents,
         )
     )
