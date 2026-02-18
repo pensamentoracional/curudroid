@@ -33,6 +33,9 @@ class AIAdvisorTests(unittest.TestCase):
             supervisor_enabled=True,
             curupira_enabled=True,
             autonomy_reactive_enabled=False,
+            curupira_transport="subprocess",
+            curupira_backend_url="",
+            curupira_backend_timeout=5.0,
         )
 
         advisor = AIAdvisor.from_config(cfg)
