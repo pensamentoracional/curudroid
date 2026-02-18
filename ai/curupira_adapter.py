@@ -19,8 +19,6 @@ from urllib import error, request
 from ai.config import load_config
 
 
-CURUPIRA_ENTRYPOINT = ["python", "external/curupira/agent.py"]
-
 
 def _utc_ts() -> str:
     return datetime.now(timezone.utc).isoformat()
@@ -126,8 +124,10 @@ def _run_curupira_http(context: dict) -> dict:
 
 def _run_curupira_subprocess(context: dict) -> dict:
     try:
+        cfg = load_config()
+        entrypoint = cfg.curupira_local_entrypoint
         result = subprocess.run(
-            CURUPIRA_ENTRYPOINT,
+            ["python", entrypoint],
             input=json.dumps(context),
             capture_output=True,
             text=True,
@@ -136,7 +136,7 @@ def _run_curupira_subprocess(context: dict) -> dict:
     except Exception as e:
         return {
             "intent": context.get("intent", "unknown"),
-            "reason": f"Falha ao executar Curupira: {e}",
+            "reason": f"Falha ao executar Curupira local ({load_config().curupira_local_entrypoint}): {e}",
             "confidence": 0.0,
             "source": "curupira",
             "status": "execution_error",

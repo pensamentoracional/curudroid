@@ -21,6 +21,7 @@ class ConfigTests(unittest.TestCase):
             curupira_transport="subprocess",
             curupira_backend_url="",
             curupira_backend_timeout=5.0,
+            curupira_local_entrypoint="external/curupira/agent.py",
         )
 
         result = validate_config(cfg)
@@ -49,6 +50,7 @@ class ConfigTests(unittest.TestCase):
             curupira_transport="subprocess",
             curupira_backend_url="",
             curupira_backend_timeout=5.0,
+            curupira_local_entrypoint="external/curupira/agent.py",
         )
         errors, warnings = validate_config(cfg)
         self.assertTrue(any("LOG_LEVEL inválido" in e for e in errors))
@@ -69,6 +71,7 @@ class ConfigTests(unittest.TestCase):
             curupira_transport="subprocess",
             curupira_backend_url="",
             curupira_backend_timeout=5.0,
+            curupira_local_entrypoint="external/curupira/agent.py",
         )
         summary = config_summary(cfg)
         self.assertNotIn("sk-supersecret", summary)
@@ -98,11 +101,35 @@ class ConfigTests(unittest.TestCase):
             curupira_transport="http",
             curupira_backend_url="",
             curupira_backend_timeout=5.0,
+            curupira_local_entrypoint="external/curupira/agent.py",
         )
 
         errors, warnings = validate_config(cfg)
         self.assertEqual(errors, [])
         self.assertTrue(any("CURUPIRA_BACKEND_URL ausente" in w for w in warnings))
+
+
+    def test_subprocess_transport_warns_when_local_entrypoint_missing(self):
+        cfg = AppConfig(
+            log_level="INFO",
+            ai_provider="none",
+            ai_api_key="",
+            telegram_token="",
+            curupira_risk_threshold=0.4,
+            log_dir="logs",
+            data_dir="data",
+            supervisor_enabled=True,
+            curupira_enabled=True,
+            autonomy_reactive_enabled=False,
+            curupira_transport="subprocess",
+            curupira_backend_url="",
+            curupira_backend_timeout=5.0,
+            curupira_local_entrypoint="/tmp/arquivo_inexistente_curupira.py",
+        )
+
+        errors, warnings = validate_config(cfg)
+        self.assertEqual(errors, [])
+        self.assertTrue(any("entrypoint local não encontrado" in w for w in warnings))
 
     def test_load_config_reads_curupira_transport_fields(self):
         with mock.patch.dict(
@@ -111,6 +138,7 @@ class ConfigTests(unittest.TestCase):
                 "CURUPIRA_TRANSPORT": "http",
                 "CURUPIRA_BACKEND_URL": "http://192.168.1.10:8000/",
                 "CURUPIRA_BACKEND_TIMEOUT": "9",
+                "CURUPIRA_LOCAL_ENTRYPOINT": "./curupira_local/agent.py",
             },
             clear=True,
         ):
@@ -119,6 +147,7 @@ class ConfigTests(unittest.TestCase):
         self.assertEqual(cfg.curupira_transport, "http")
         self.assertEqual(cfg.curupira_backend_url, "http://192.168.1.10:8000")
         self.assertEqual(cfg.curupira_backend_timeout, 9.0)
+        self.assertEqual(cfg.curupira_local_entrypoint, "./curupira_local/agent.py")
 
 
 if __name__ == "__main__":

@@ -5,6 +5,7 @@ Mantém defaults seguros e validações leves para ambiente Termux/Android.
 from __future__ import annotations
 
 import os
+from pathlib import Path
 from dataclasses import dataclass
 from typing import List
 
@@ -18,6 +19,7 @@ DEFAULT_CURUPIRA_ENABLED = True
 DEFAULT_AUTONOMY_REACTIVE_ENABLED = False
 DEFAULT_CURUPIRA_TRANSPORT = "subprocess"
 DEFAULT_CURUPIRA_BACKEND_TIMEOUT = 5.0
+DEFAULT_CURUPIRA_LOCAL_ENTRYPOINT = "external/curupira/agent.py"
 
 
 @dataclass(frozen=True)
@@ -35,6 +37,7 @@ class AppConfig:
     curupira_transport: str
     curupira_backend_url: str
     curupira_backend_timeout: float
+    curupira_local_entrypoint: str
 
 
 def _read_float(name: str, default: float) -> float:
@@ -109,6 +112,7 @@ def load_config() -> AppConfig:
             "CURUPIRA_BACKEND_TIMEOUT",
             DEFAULT_CURUPIRA_BACKEND_TIMEOUT,
         ),
+        curupira_local_entrypoint=(os.getenv("CURUPIRA_LOCAL_ENTRYPOINT") or DEFAULT_CURUPIRA_LOCAL_ENTRYPOINT).strip(),
     )
 
 
@@ -147,6 +151,18 @@ def validate_config(config: AppConfig) -> tuple[List[str], List[str]]:
             "CURUPIRA_BACKEND_TIMEOUT inválido: esperado valor entre 0.5 e 30.0"
         )
 
+    if config.curupira_transport in {"subprocess", "auto"} and not config.curupira_local_entrypoint:
+        warnings.append("Curupira: CURUPIRA_LOCAL_ENTRYPOINT ausente para modo local")
+
+    if (
+        config.curupira_transport in {"subprocess", "auto"}
+        and config.curupira_local_entrypoint
+        and not Path(config.curupira_local_entrypoint).exists()
+    ):
+        warnings.append(
+            f"Curupira: entrypoint local não encontrado em {config.curupira_local_entrypoint}"
+        )
+
     if config.curupira_transport == "http" and not config.curupira_backend_url:
         warnings.append(
             "Curupira: CURUPIRA_BACKEND_URL ausente (modo http ficará indisponível)"
@@ -182,6 +198,7 @@ def config_summary(config: AppConfig) -> str:
         f"CURUPIRA_TRANSPORT={config.curupira_transport}, "
         f"CURUPIRA_BACKEND_URL={config.curupira_backend_url or '(ausente)'}, "
         f"CURUPIRA_BACKEND_TIMEOUT={config.curupira_backend_timeout}, "
+        f"CURUPIRA_LOCAL_ENTRYPOINT={config.curupira_local_entrypoint}, "
         f"LOG_DIR={config.log_dir}, DATA_DIR={config.data_dir}"
     )
 
