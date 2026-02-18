@@ -62,6 +62,12 @@ class OpenAIProvider:
             for content in item.get("content", []):
                 text = content.get("text")
                 if text:
-                    return json.loads(text)
+                    data = json.loads(text)
+
+                    #  Validaao explicita de tipo
+                    if not isinstance(data, dict):
+                        raise ValueError("AI response must be a JSON object")
+
+                    return data
 
         return None

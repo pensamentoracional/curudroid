@@ -1,7 +1,7 @@
 [
   {
     "plan_path": "ai/approved/examples/sample_plan_v0.1.json",
-    "id": "intent_1",
+    "id": "intent_test_1",
     "priority": 1,
     "status": "approved_for_dry_run"
   },
@@ -21,7 +21,7 @@
     "plan_path": "ai/approved/examples/sample_plan_v0.1.json",
     "id": "intent_4",
     "priority": 1,
-    "status": "processing"
+    "status": "approved_for_dry_run"
   },
   {
     "plan_path": "ai/approved/examples/sample_plan_v0.1.json",
@@ -46,161 +46,5 @@
     "id": "intent_8",
     "priority": 1,
     "status": "approved_for_dry_run"
-  },
-  {
-    "plan_path": "ai/approved/examples/sample_plan_v0.1.json",
-    "id": "intent_9",
-    "priority": 1,
-    "status": "approved_for_dry_run"
-  },
-  {
-    "plan_path": "ai/approved/examples/sample_plan_v0.1.json",
-    "id": "intent_10",
-    "priority": 1,
-    "status": "approved_for_dry_run"
-  },
-  {
-    "plan_path": "ai/approved/examples/sample_plan_v0.1.json",
-    "id": "intent_11",
-    "priority": 1,
-    "status": "approved_for_dry_run"
-  },
-  {
-    "plan_path": "ai/approved/examples/sample_plan_v0.1.json",
-    "id": "intent_12",
-    "priority": 1,
-    "status": "approved_for_dry_run"
-  },
-  {
-    "plan_path": "ai/approved/examples/sample_plan_v0.1.json",
-    "id": "intent_13",
-    "priority": 1,
-    "status": "approved_for_dry_run"
-  },
-  {
-    "plan_path": "ai/approved/examples/sample_plan_v0.1.json",
-    "id": "intent_14",
-    "priority": 1,
-    "status": "approved_for_dry_run"
-  },
-  {
-    "plan_path": "ai/approved/examples/sample_plan_v0.1.json",
-    "id": "intent_15",
-    "priority": 1,
-    "status": "approved_for_dry_run"
-  },
-  {
-    "plan_path": "ai/approved/examples/sample_plan_v0.1.json",
-    "id": "intent_16",
-    "priority": 1,
-    "status": "approved_for_dry_run"
-  },
-  {
-    "plan_path": "ai/approved/examples/sample_plan_v0.1.json",
-    "id": "intent_17",
-    "priority": 1,
-    "status": "approved_for_dry_run"
-  },
-  {
-    "plan_path": "ai/approved/examples/sample_plan_v0.1.json",
-    "id": "intent_18",
-    "priority": 1,
-    "status": "approved_for_dry_run"
-  },
-  {
-    "plan_path": "ai/approved/examples/sample_plan_v0.1.json",
-    "id": "intent_19",
-    "priority": 1,
-    "status": "approved_for_dry_run"
-  },
-  {
-    "plan_path": "ai/approved/examples/sample_plan_v0.1.json",
-    "id": "intent_20",
-    "priority": 1,
-    "status": "approved_for_dry_run"
-  },
-  {
-    "plan_path": "ai/approved/examples/sample_plan_v0.1.json",
-    "id": "intent_21",
-    "priority": 1,
-    "status": "approved_for_dry_run"
-  },
-  {
-    "plan_path": "ai/approved/examples/sample_plan_v0.1.json",
-    "id": "intent_22",
-    "priority": 1,
-    "status": "approved_for_dry_run"
-  },
-  {
-    "plan_path": "ai/approved/examples/sample_plan_v0.1.json",
-    "id": "intent_23",
-    "priority": 1,
-    "status": "approved_for_dry_run"
-  },
-  {
-    "plan_path": "ai/approved/examples/sample_plan_v0.1.json",
-    "id": "intent_24",
-    "priority": 1,
-    "status": "approved_for_dry_run"
-  },
-  {
-    "plan_path": "ai/approved/examples/sample_plan_v0.1.json",
-    "id": "intent_25",
-    "priority": 1,
-    "status": "approved_for_dry_run"
-  },
-  {
-    "plan_path": "ai/approved/examples/sample_plan_v0.1.json",
-    "id": "intent_26",
-    "priority": 1,
-    "status": "approved_for_dry_run"
-  },
-  {
-    "plan_path": "ai/approved/examples/sample_plan_v0.1.json",
-    "id": "intent_27",
-    "priority": 1,
-    "status": "approved_for_dry_run"
-  },
-  {
-    "plan_path": "ai/approved/examples/sample_plan_v0.1.json",
-    "id": "intent_28",
-    "priority": 1,
-    "status": "approved_for_dry_run"
-  },
-  {
-    "plan_path": "ai/approved/examples/sample_plan_v0.1.json",
-    "id": "intent_29",
-    "priority": 1,
-    "status": "approved_for_dry_run"
-  },
-  {
-    "plan_path": "ai/approved/examples/sample_plan_high_risk.json",
-    "id": "intent_30",
-    "priority": 1,
-    "status": "blocked"
-  },
-  {
-    "plan_path": "ai/approved/examples/sample_plan_v0.1.json",
-    "id": "intent_31",
-    "priority": 1,
-    "status": "approved_for_dry_run"
-  },
-  {
-    "plan_path": "ai/approved/examples/sample_plan_high_risk.json",
-    "id": "intent_32",
-    "priority": 1,
-    "status": "blocked"
-  },
-  {
-    "plan_path": "ai/approved/examples/sample_plan_high_risk.json",
-    "id": "intent_33",
-    "priority": 1,
-    "status": "blocked"
-  },
-  {
-    "plan_path": "ai/approved/examples/sample_plan_high_risk.json",
-    "id": "intent_34",
-    "priority": 1,
-    "status": "blocked"
   }
 ]

@@ -45,13 +45,18 @@ class AIAdvisor:
                 )
             )
 
-        return cls(NullProvider())
+        elif provider_name == "openclaw":
+            from core.ai_providers.openclaw_provider import OpenClawProvider
+            return cls(OpenClawProvider(config))
+        elif provider_name == "none":
+            return cls(NullProvider())
+
 
     def analyze(self, plan: dict, context: dict) -> dict | None:
+        started = time.perf_counter()
+
         if self.provider.provider_name == "none":
             return None
-
-        started = time.perf_counter()
 
         try:
             sanitized_plan = _sanitize_plan(plan)
@@ -142,12 +147,23 @@ def _normalize(raw: dict, provider: str, model: str) -> AIRecommendation:
     if action not in _ALLOWED_ACTIONS:
         action = "review"
 
-    risk_raw = raw.get("risk_assessment") or {}
+    risk_raw = raw.get("risk_assessment")
+
+    if not isinstance(risk_raw, dict):
+        risk_raw = {}
+
     level = str(risk_raw.get("level") or "medium").strip().lower()
     if level not in _ALLOWED_RISK_LEVELS:
         level = "medium"
 
-    score = _clamp_float(risk_raw.get("score"), 0.0, 1.0, 0.5)
+    score = _clamp_float(
+        risk_raw.get("score"),
+        0.0,
+        1.0,
+        0.5,
+    )
+
+
     confidence = _clamp_float(raw.get("confidence"), 0.0, 1.0, 0.0)
     explanation = str(raw.get("explanation") or "Sem explicação").strip()
 

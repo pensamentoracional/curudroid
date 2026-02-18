@@ -1,13 +1,14 @@
 {
-  "intents_processed": 39,
-  "supervisor_allowed": 30,
-  "curupira_allowed": 29,
-  "intents_dry_run": 32,
-  "reactive_approved": 32,
-  "reactive_empty": 7,
-  "executor_executed": 31,
+  "intents_processed": 47,
+  "supervisor_allowed": 31,
+  "curupira_allowed": 30,
+  "intents_dry_run": 40,
+  "reactive_approved": 40,
+  "reactive_empty": 15,
+  "executor_executed": 78,
   "supervisor_blocked": 5,
   "intents_blocked": 6,
   "reactive_blocked": 6,
-  "curupira_blocked": 1
+  "curupira_blocked": 1,
+  "executor_validation_failed": 14
 }
