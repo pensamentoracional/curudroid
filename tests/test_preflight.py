@@ -17,6 +17,10 @@ class PreflightTests(unittest.TestCase):
             supervisor_enabled=True,
             curupira_enabled=True,
             autonomy_reactive_enabled=False,
+            curupira_transport="subprocess",
+            curupira_backend_url="",
+            curupira_backend_timeout=5.0,
+            curupira_local_entrypoint="external/curupira/agent.py",
         )
         report = run_preflight(cfg)
         exit_code = emit_report(report, log_func=lambda _: None)
@@ -35,6 +39,10 @@ class PreflightTests(unittest.TestCase):
             supervisor_enabled=True,
             curupira_enabled=True,
             autonomy_reactive_enabled=False,
+            curupira_transport="subprocess",
+            curupira_backend_url="",
+            curupira_backend_timeout=5.0,
+            curupira_local_entrypoint="external/curupira/agent.py",
         )
         report = run_preflight(cfg)
         exit_code = emit_report(report, log_func=lambda _: None)

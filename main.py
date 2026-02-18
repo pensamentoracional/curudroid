@@ -127,7 +127,11 @@ def show_observability_report(config):
     print(f"AUTONOMY_REACTIVE_ENABLED={config.autonomy_reactive_enabled}")
     print(f"SUPERVISOR_ENABLED={config.supervisor_enabled}")
     print(f"CURUPIRA_ENABLED={config.curupira_enabled}")
-    print(f"CURUPIRA_RISK_THRESHOLD={config.curupira_risk_threshold}\n")
+    print(f"CURUPIRA_RISK_THRESHOLD={config.curupira_risk_threshold}")
+    print(f"CURUPIRA_TRANSPORT={config.curupira_transport}")
+    print(f"CURUPIRA_BACKEND_URL={config.curupira_backend_url or '(ausente)'}")
+    print(f"CURUPIRA_BACKEND_TIMEOUT={config.curupira_backend_timeout}")
+    print(f"CURUPIRA_LOCAL_ENTRYPOINT={config.curupira_local_entrypoint}\n")
 
     print("Metrics:")
     metrics = load_metrics()

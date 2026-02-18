@@ -5,16 +5,21 @@ Mantém defaults seguros e validações leves para ambiente Termux/Android.
 from __future__ import annotations
 
 import os
+from pathlib import Path
 from dataclasses import dataclass
 from typing import List
 
 _ALLOWED_LOG_LEVELS = {"DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"}
+_ALLOWED_CURUPIRA_TRANSPORTS = {"subprocess", "http", "auto"}
 
 # Fonte canônica de default; valor efetivo vem de AppConfig em runtime.
 DEFAULT_CURUPIRA_RISK_THRESHOLD = 0.4
 DEFAULT_SUPERVISOR_ENABLED = True
 DEFAULT_CURUPIRA_ENABLED = True
 DEFAULT_AUTONOMY_REACTIVE_ENABLED = False
+DEFAULT_CURUPIRA_TRANSPORT = "subprocess"
+DEFAULT_CURUPIRA_BACKEND_TIMEOUT = 5.0
+DEFAULT_CURUPIRA_LOCAL_ENTRYPOINT = "external/curupira/agent.py"
 
 
 @dataclass(frozen=True)
@@ -29,6 +34,10 @@ class AppConfig:
     supervisor_enabled: bool
     curupira_enabled: bool
     autonomy_reactive_enabled: bool
+    curupira_transport: str
+    curupira_backend_url: str
+    curupira_backend_timeout: float
+    curupira_local_entrypoint: str
 
 
 def _read_float(name: str, default: float) -> float:
@@ -39,6 +48,7 @@ def _read_float(name: str, default: float) -> float:
         return float(raw)
     except ValueError:
         return default
+
 
 def _read_bool(name: str, default: bool) -> bool:
     raw = (os.getenv(name) or "").strip().lower()
@@ -54,6 +64,21 @@ def _read_bool(name: str, default: bool) -> bool:
 
     return default
 
+
+def _read_curupira_transport(name: str, default: str) -> str:
+    raw = (os.getenv(name) or "").strip().lower()
+    if not raw:
+        return default
+    if raw in _ALLOWED_CURUPIRA_TRANSPORTS:
+        return raw
+    return default
+
+
+def _read_timeout_seconds(name: str, default: float) -> float:
+    timeout = _read_float(name, default)
+    return max(0.5, min(30.0, timeout))
+
+
 def load_config() -> AppConfig:
     """Lê variáveis de ambiente com defaults conservadores."""
     return AppConfig(
@@ -66,21 +91,28 @@ def load_config() -> AppConfig:
         ),
         log_dir=(os.getenv("LOG_DIR") or "logs").strip(),
         data_dir=(os.getenv("DATA_DIR") or "data").strip(),
-
         supervisor_enabled=_read_bool(
             "SUPERVISOR_ENABLED",
-            DEFAULT_SUPERVISOR_ENABLED
+            DEFAULT_SUPERVISOR_ENABLED,
         ),
-
         curupira_enabled=_read_bool(
             "CURUPIRA_ENABLED",
-            DEFAULT_CURUPIRA_ENABLED
+            DEFAULT_CURUPIRA_ENABLED,
         ),
-
         autonomy_reactive_enabled=_read_bool(
             "AUTONOMY_REACTIVE_ENABLED",
-            DEFAULT_AUTONOMY_REACTIVE_ENABLED
+            DEFAULT_AUTONOMY_REACTIVE_ENABLED,
         ),
+        curupira_transport=_read_curupira_transport(
+            "CURUPIRA_TRANSPORT",
+            DEFAULT_CURUPIRA_TRANSPORT,
+        ),
+        curupira_backend_url=(os.getenv("CURUPIRA_BACKEND_URL") or "").strip().rstrip("/"),
+        curupira_backend_timeout=_read_timeout_seconds(
+            "CURUPIRA_BACKEND_TIMEOUT",
+            DEFAULT_CURUPIRA_BACKEND_TIMEOUT,
+        ),
+        curupira_local_entrypoint=(os.getenv("CURUPIRA_LOCAL_ENTRYPOINT") or DEFAULT_CURUPIRA_LOCAL_ENTRYPOINT).strip(),
     )
 
 
@@ -109,6 +141,38 @@ def validate_config(config: AppConfig) -> tuple[List[str], List[str]]:
             "CURUPIRA_RISK_THRESHOLD inválido: esperado valor entre 0.0 e 1.0"
         )
 
+    if config.curupira_transport not in _ALLOWED_CURUPIRA_TRANSPORTS:
+        errors.append(
+            "CURUPIRA_TRANSPORT inválido: esperado subprocess, http ou auto"
+        )
+
+    if not (0.5 <= config.curupira_backend_timeout <= 30.0):
+        errors.append(
+            "CURUPIRA_BACKEND_TIMEOUT inválido: esperado valor entre 0.5 e 30.0"
+        )
+
+    if config.curupira_transport in {"subprocess", "auto"} and not config.curupira_local_entrypoint:
+        warnings.append("Curupira: CURUPIRA_LOCAL_ENTRYPOINT ausente para modo local")
+
+    if (
+        config.curupira_transport in {"subprocess", "auto"}
+        and config.curupira_local_entrypoint
+        and not Path(config.curupira_local_entrypoint).exists()
+    ):
+        warnings.append(
+            f"Curupira: entrypoint local não encontrado em {config.curupira_local_entrypoint}"
+        )
+
+    if config.curupira_transport == "http" and not config.curupira_backend_url:
+        warnings.append(
+            "Curupira: CURUPIRA_BACKEND_URL ausente (modo http ficará indisponível)"
+        )
+
+    if config.curupira_transport == "auto" and not config.curupira_backend_url:
+        warnings.append(
+            "Curupira: CURUPIRA_BACKEND_URL ausente (modo auto cairá sempre para subprocess)"
+        )
+
     if config.ai_provider in {"none", "", "disabled", "off"}:
         warnings.append("IA: DESATIVADA (AI_PROVIDER não configurado)")
     elif not config.ai_api_key:
@@ -131,6 +195,10 @@ def config_summary(config: AppConfig) -> str:
         f"AI_API_KEY={mask_secret(config.ai_api_key)}, "
         f"TELEGRAM_TOKEN={mask_secret(config.telegram_token)}, "
         f"CURUPIRA_RISK_THRESHOLD={config.curupira_risk_threshold}, "
+        f"CURUPIRA_TRANSPORT={config.curupira_transport}, "
+        f"CURUPIRA_BACKEND_URL={config.curupira_backend_url or '(ausente)'}, "
+        f"CURUPIRA_BACKEND_TIMEOUT={config.curupira_backend_timeout}, "
+        f"CURUPIRA_LOCAL_ENTRYPOINT={config.curupira_local_entrypoint}, "
         f"LOG_DIR={config.log_dir}, DATA_DIR={config.data_dir}"
     )
 
